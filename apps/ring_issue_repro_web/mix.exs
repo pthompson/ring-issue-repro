@@ -48,6 +48,7 @@ defmodule RingIssueReproWeb.MixProject do
       {:telemetry_metrics, "~> 0.6"},
       {:circular_buffer, "~> 0.4"},
       {:plug_cowboy, "~> 2.5"},
+      {:jason, "~> 1.3"},
       {:gettext, "~> 0.19"},
       {:phoenix_live_reload, "~> 1.3", only: :dev},
       {:dialyxir, "~> 1.1", only: [:test], runtime: false},
