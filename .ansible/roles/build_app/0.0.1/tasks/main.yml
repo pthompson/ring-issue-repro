@@ -1,0 +1,79 @@
+---
+- name: Load production vars
+  include_vars: '{{ production_vars_file }}'
+
+- name: Create secrets
+  template:
+    src: prod.secret.exs.j2
+    dest: '{{ build_dir }}/config/prod.secret.exs'
+    mode: 0644
+
+- name: Remove previous build
+  file:
+    name: '{{ build_dir }}/_build'
+    state: absent
+
+- name: Remove previous deps
+  file:
+    name: '{{ build_dir }}/deps'
+    state: absent
+
+# NOTE: If get error on following command (mix deps.get), e.g., "msg": "non-zero return code", "rc": -9
+# It may be timing out due to excessive memory useage.
+# Until new version of Elixir is available (1.12.4 or 1.13.0), we need to update hex in Docker container to github version.
+# Fixed in hexpm/hex v0.21.3.
+# Do the following:
+#    $ docker ps
+#    $ docker attach <id>
+#    % mix archive.install github hexpm/hex
+#    % mix local.hex
+
+- name: Update local hex to version from Github (temporary workaround until Elixir 1.12.4 or 1.13.0)
+  command: bash -lc "mix archive.install --force github hexpm/hex"
+
+- name: Fetch mix dependencies
+  command: bash -lc "mix deps.get --only prod" chdir="{{ build_dir }}"
+  environment:
+    MIX_ENV: '{{ mix_env }}'
+
+- name: Fetch npm dependencies
+  command: bash -lc "cd {{ web_app_build_dir }}/assets && npm install"
+  environment:
+    MIX_ENV: '{{ mix_env }}'
+
+- name: Build assets
+  command: bash -lc "cd {{ web_app_build_dir }}/assets && npm run deploy"
+  environment:
+    MIX_ENV: '{{ mix_env }}'
+
+- name: Generate Tailwind whitelist
+  command: bash -lc "mix tailwind.gen.whitelist" chdir="{{ web_app_build_dir }}"
+  environment:
+    MIX_ENV: '{{ mix_env }}'
+
+- name: Digest assets
+  command: bash -lc "mix phx.digest" chdir="{{ web_app_build_dir }}"
+  environment:
+    MIX_ENV: '{{ mix_env }}'
+
+- name: 'Releasing {{ build_version }}'
+  command: bash -lc "mix release --path {{ release_dir }}" chdir="{{ build_dir }}"
+  environment:
+    MIX_ENV: '{{ mix_env }}'
+    BUILD_VERSION: '{{ build_version }}'
+
+- name: Adding BUILD_VERSION file with "{{ build_version }}"
+  copy:
+    content: '{{ build_version }}'
+    dest: '{{ release_dir }}/BUILD_VERSION'
+
+- name: Get GIT version
+  command: git rev-parse HEAD
+  args:
+    chdir: '{{ build_dir }}'
+  register: git_result
+
+- name: Adding COMMIT_HASH file with "{{ git_result.stdout }}"
+  copy:
+    content: '{{ git_result.stdout }}'
+    dest: '{{ release_dir }}/COMMIT_HASH'

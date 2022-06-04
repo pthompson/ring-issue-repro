@@ -1,0 +1,40 @@
+- hosts: all
+  gather_facts: no
+  vars:
+    # TODO: get release_version programatically
+    release_version: '0.3.0'
+    local_build_dir: '/tmp/ring_issue_repro'
+    git_repo: 'git@github.com:inkstonesoftware/listi.git'
+    production_vars_file: '../production/host_vars/ring_issue_repro.com'
+    static_assets_dir: '{{ build_dir }}/apps/ring_issue_repro_web/priv/static'
+
+  pre_tasks:
+    - command: date +"{{ release_version }}-%Y.%-m.%-d.%-H.%-M"
+      delegate_to: localhost
+      register: build_version_cmd
+
+    - set_fact:
+        build_version: '{{ build_version_cmd.stdout }}'
+
+    - name: Checkout the master branch from git repo
+      delegate_to: localhost
+      git:
+        repo: '{{ git_repo }}'
+        dest: '{{ local_build_dir }}'
+        version: master
+        force: yes
+      when: ansible_connection == "docker"
+
+  roles:
+    - role: docker_setup/0.0.1
+      vars:
+        container_name: '{{ ansible_host }}'
+        image_name: inkstonesoftware/elixir-ansible-build-image-ubuntu-20.04:latest
+      when: ansible_connection == "docker"
+
+    - role: build_app/0.0.1
+      vars:
+        mix_env: prod
+        app_name: ringissuerepro
+        web_app_build_dir: '{{ build_dir }}/apps/ring_issue_repro_web'
+        release_dir: '{{ build_dir }}/_build/{{ mix_env }}/rel/{{ app_name }}'

@@ -1,0 +1,46 @@
+@layer utilities {
+  .scroll {
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  /* Home gradient */
+  .bg-gradient-home {
+    background: linear-gradient(
+      180deg,
+      #f1f1ed 0%,
+      #f1f1ed 17.54%,
+      #fffdfa 38.55%,
+      #fdfbf7 55.88%,
+      #fbf6eb 79.52%,
+      #f0e0d7 99.93%
+    );
+  }
+
+  /* Category gradient */
+  .bg-gradient-list-of-lists {
+    background: linear-gradient(
+      180deg,
+      #fff6e2 -0.85%,
+      #fbf6eb 38.55%,
+      #fffdfa 75.84%,
+      #ffccb7 100%
+    );
+  }
+
+  /* List of lists gradient */
+  .bg-gradient-category {
+    background: linear-gradient(
+      180deg,
+      #ffccb7 -0.85%,
+      #f1f1ed 17.54%,
+      #fffdfa 38.55%,
+      #fbf6eb 75.84%,
+      #fdfbf7 100%
+    );
+  }
+
+  [x-cloak] {
+    display: none;
+  }
+}

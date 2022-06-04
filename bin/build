@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+docker kill docker_build_server || true
+cd .ansible
+if ansible-playbook -i apps/build/inventory apps/build/build.yml -vvv ; then
+    say -v Tessa build complete
+else
+    say -v Tessa build failed
+fi
+echo Build finished at `date`

@@ -1,0 +1,8 @@
+{
+  "indent_size": 2,
+  "indent_char": " ",
+  "indent_with_tabs": false,
+  "wrap_attributes": "force-aligned",
+  "preserve_newlines": true,
+  "reformat_unformatted_tags": "true"
+}

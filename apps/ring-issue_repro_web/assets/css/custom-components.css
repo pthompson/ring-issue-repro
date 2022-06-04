@@ -1,0 +1,49 @@
+@layer components {
+  .focus-ring {
+    @apply focus:border-gray-900 focus:outline-none focus:ring-gray-900 focus:ring focus:ring-offset-2 focus-visible:border-gray-800 focus-visible:outline-none focus-visible:ring-gray-800 focus-visible:ring focus-visible:ring-offset-2;
+  }
+
+  .text-input-field {
+    @apply rounded border border-gray-800 text-gray-900 text-base leading-6 bg-transparent shadow-none focus:outline-none focus:bg-white focus:border-gray-800 focus:ring-1 focus:ring-gray-800;
+  }
+
+  .text-link {
+    @apply text-gray-800 bg-transparent hover:text-gray-700 hover:cursor-pointer focus-ring;
+  }
+
+  .red-text-link {
+    @apply text-red-600 hover:text-red-500 hover:cursor-pointer focus-ring;
+  }
+
+  .btn {
+    @apply px-6 py-3 rounded-full text-base leading-6 font-semibold border-none cursor-pointer focus-ring;
+  }
+
+  .btn-round {
+    @apply w-10 h-10 rounded-full justify-center align-middle cursor-pointer focus-ring;
+  }
+
+  .btn-color-primary {
+    @apply text-white bg-gray-800 hover:bg-gray-700 active:bg-gray-700 disabled:bg-gray-800 disabled:bg-opacity-30 transition duration-300 ease-in-out;
+  }
+
+  .btn-color-primary-disabled {
+    @apply text-white bg-gray-800 opacity-20;
+  }
+
+  .btn-color-secondary {
+    @apply text-white bg-teal-800 hover:bg-teal-700 active:bg-teal-700 disabled:bg-teal-800 disabled:bg-opacity-50 transition duration-300 ease-in-out;
+  }
+
+  .btn-color-warning {
+    @apply text-gray-900 bg-red-700 hover:bg-red-600 focus:bg-red-600 active:bg-red-600 disabled:bg-red-700 disabled:bg-opacity-50 transition duration-300 ease-in-out focus-ring;
+  }
+
+  .btn-color-white {
+    @apply text-gray-900 bg-white disabled:bg-white focus-ring disabled:bg-opacity-60;
+  }
+
+  .btn-color-transparent {
+    @apply text-ink bg-transparent focus-ring;
+  }
+}

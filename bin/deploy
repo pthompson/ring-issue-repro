@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+cd .ansible
+if ansible-playbook -i apps/production/inventory apps/production/deploy.yml --extra-vars "restart_app=true" -vvv ; then
+    say -v Tessa app deployed
+else
+    say -v Tessa problem deploying app
+fi
+echo App deployed at `date`

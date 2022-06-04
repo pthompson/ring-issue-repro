@@ -1,0 +1,33 @@
+---
+- hosts: webservers
+  gather_facts: no
+  serial: 1
+
+  vars:
+    # TODO: get release_version programatically
+    release_version: '0.3.0'
+    mix_env: prod
+    app_name: ring_issue_repro
+    local_release_dir: '{{ local_build_dir }}/_build/{{ mix_env }}/rel/{{ app_name }}'
+    build_version: "{{ lookup('file', local_release_dir + '/BUILD_VERSION') }}"
+    commit_hash: "{{ lookup('file', local_release_dir + '/COMMIT_HASH') }}"
+    restart_app: "{{ ansible_connection != 'docker' }}"
+
+  pre_tasks:
+    - name: Get git version
+      delegate_to: localhost
+      become: false
+      shell: 'cd {{ local_build_dir }}; git rev-parse master'
+      register: git_version_result
+
+    - name: Check for newest build
+      delegate_to: localhost
+      fail:
+        msg: 'Latest GIT commit of {{ git_version_result.stdout_lines[0] }} does not match build version of {{ commit_hash }}. Please build a new release.'
+      when: commit_hash != git_version_result.stdout_lines[0]
+
+  roles:
+    - role: deploy_app/0.0.1
+      vars:
+        username: '{{ ansible_user }}'
+        ssh_port: '1022'

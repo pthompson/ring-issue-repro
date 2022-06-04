@@ -1,0 +1,40 @@
+## Customize flags given to the VM: http://erlang.org/doc/man/erl.html
+## -mode/-name/-sname/-setcookie are configured via env vars, do not set them here
+
+## Heartbeat management; auto-restarts VM if it dies or becomes unresponsive
+## (Disabled by default..use with caution!)
+##-heart
+
+## Enable kernel poll and a few async threads
++K true
++A 12
+
+## For OTP21+, the +A flag is not used anymore,
+## +SDio replace it to use dirty schedulers
++SDio 12
+
+## Increase number of concurrent ports/sockets
++Q 131072
+
+## Tweak GC to run more often
+##-env ERL_FULLSWEEP_AFTER 0
+
+# Tell SASL not to log progress reports
+-sasl errlog_type error
+
+# set port range
+-kernel inet_dist_listen_min 12169 inet_dist_listen_max 12171
+
+# Enable SMP automatically based on availability
+# On OTP21+, this is not needed anymore.
+-smp auto
+
++sbt db
+
++sub true
+
++sbwt none
+
++swt low
+
+# -hidden

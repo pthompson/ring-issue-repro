@@ -1,0 +1,13 @@
+---
+all:
+  children:
+    webservers:
+      hosts:
+        143.198.98.166:1022:
+        143.198.96.18:1022:
+  vars:
+    local_build_dir: /tmp/ring_issue_repro
+    ansible_user: deploy
+    releases_dir: "/opt/org/ring_issue_repro/releases"
+    current_dir: "/opt/org/ring_issue_repro/current"
+    releases_to_keep: 25

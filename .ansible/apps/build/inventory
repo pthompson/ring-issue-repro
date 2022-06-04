@@ -1,0 +1,11 @@
+---
+all:
+  hosts:
+    build_server
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_connection: docker
+    ansible_host: docker_build_server
+    build_dir: "/app/build"
+
+
