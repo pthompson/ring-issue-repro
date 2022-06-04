@@ -4,8 +4,8 @@
     # TODO: get release_version programatically
     release_version: '0.3.0'
     local_build_dir: '/tmp/ring_issue_repro'
-    git_repo: 'git@github.com:inkstonesoftware/listi.git'
-    production_vars_file: '../production/host_vars/ring_issue_repro.com'
+    git_repo: 'git@github.com:pthompson/ring-issue-repro.git'
+    # production_vars_file: '../production/host_vars/ring_issue_repro.com'
     static_assets_dir: '{{ build_dir }}/apps/ring_issue_repro_web/priv/static'
 
   pre_tasks:
@@ -21,7 +21,7 @@
       git:
         repo: '{{ git_repo }}'
         dest: '{{ local_build_dir }}'
-        version: master
+        version: main
         force: yes
       when: ansible_connection == "docker"
 

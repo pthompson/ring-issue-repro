@@ -1,6 +1,6 @@
 ---
-- name: Load production vars
-  include_vars: '{{ production_vars_file }}'
+# - name: Load production vars
+#   include_vars: '{{ production_vars_file }}'
 
 - name: Create secrets
   template:
